@@ -1,0 +1,13 @@
+# BayesianRidge on performance-vector features, LogEI acquisition (BayesRidge-LogEI).
+_target_: functools.partial
+_args_:
+  - _target_: hydra.utils.get_class
+    path: simple_metalearning.estimators.bayesian_ridge_ei.BayesianRidgeEIEstimator
+fit_intercept: false
+use_metadata: false
+prior_equal_weight: false
+prior_shape: 2.0
+f_star_from_predictions: false
+acquisition_fn:
+  _target_: simple_metalearning.estimators.acquisition.LogEIGaussianAcquisition
+  xi: 0.0

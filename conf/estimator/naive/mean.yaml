@@ -1,0 +1,4 @@
+_target_: functools.partial
+_args_:
+  - _target_: hydra.utils.get_class
+    path: simple_metalearning.estimators.mean.Mean

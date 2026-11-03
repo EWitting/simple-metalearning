@@ -1,0 +1,14 @@
+# BayesianRidge EI on OOF RF predictions (OOFRidge-EI).
+# Per-task Random Forests trained on hyperparameter features via k-fold CV produce
+# out-of-fold predictions that replace raw performance-matrix columns as features.
+# fit_intercept=False, sklearn default priors (no equal-weight prior).
+_target_: functools.partial
+_args_:
+  - _target_: hydra.utils.get_class
+    path: simple_metalearning.estimators.oof_ridge_ei.OOFRidgeEIEstimator
+rf_n_estimators: 100
+rf_min_samples_leaf: 3
+n_splits: 5
+acquisition_fn:
+  _target_: simple_metalearning.estimators.acquisition.EIGaussianAcquisition
+  xi: 0.0

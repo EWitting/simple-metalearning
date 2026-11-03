@@ -1,0 +1,11 @@
+# BayesianRidge on OOF RF predictions, LogEI acquisition (OOFRidge-LogEI).
+_target_: functools.partial
+_args_:
+  - _target_: hydra.utils.get_class
+    path: simple_metalearning.estimators.oof_ridge_ei.OOFRidgeEIEstimator
+rf_n_estimators: 100
+rf_min_samples_leaf: 3
+n_splits: 5
+acquisition_fn:
+  _target_: simple_metalearning.estimators.acquisition.LogEIGaussianAcquisition
+  xi: 0.0

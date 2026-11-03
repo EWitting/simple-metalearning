@@ -1,0 +1,48 @@
+program: src/simple_metalearning/main.py
+project: simple-metalearning
+method: random
+metric:
+  name: area/visible_num/test_normalized_regret
+  goal: minimize
+
+parameters:
+  estimator.embedding_dim:
+    values: [8, 16, 32]
+  estimator.optimizer_class.lr:
+    distribution: log_uniform_values
+    min: 0.005
+    max: 0.1
+  estimator.batch_size:
+    values: [256, 512, 1024, 2048]
+  estimator.flow_tower_dims:
+    values:
+      - [16]
+      - [32]
+      - [64]
+      - [128]
+      - [16, 16]
+      - [32, 32]
+      - [64, 64]
+      - [128, 128]
+      
+
+command:
+  - ${env}
+  - uv
+  - run
+  - python
+  - -m
+  - simple_metalearning.main
+  - experiment=bo_selection
+  - experiment.n_folds=5
+  - experiment.n_folds_used=1
+  - experiment.max_visible=200
+  - dataset=tabarena
+  - dataset.normalization=dummy
+  - dataset.val_test_split=true
+  - +dataset.flip_sign=true
+  - +metafeature_transforms=standardscaler
+  - estimator=deep/two_tower_assymmetric
+  - estimator.update_task_only=true
+  - +wandb.tags=["sweep","cash","two_tower"]
+  - ${args_no_hyphens}

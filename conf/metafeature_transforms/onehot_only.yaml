@@ -1,0 +1,6 @@
+# One-hot encoding only (based on flow/task indices)
+flow:
+  - _target_: simple_metalearning.datasets.metafeature_transforms.OneHotTransform
+
+task:
+  - _target_: simple_metalearning.datasets.metafeature_transforms.OneHotTransform

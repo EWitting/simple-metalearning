@@ -1,0 +1,26 @@
+# Two-tower with pure learned embeddings (no content features).
+# Embeddings feed directly into the dot product — no linear projection.
+defaults:
+  - deep/two_tower@_here_
+
+# Disable content features — pure collaborative filtering signal only.
+use_flow_features: false
+use_task_features: false
+
+# null = identity tower (no projection); embedding_dim must match embed dims.
+flow_tower_dims: null
+task_tower_dims: null
+embedding_dim: 8
+flow_embed_dim: ${.embedding_dim}
+task_embed_dim: ${.embedding_dim}
+
+n_epochs: 500
+n_iter_update: 5
+batch_size: 1024
+optimizer_class:
+  _target_: functools.partial
+  _args_:
+    - _target_: hydra.utils.get_class
+      path: torch.optim.AdamW
+  lr: 0.005
+  weight_decay: 0.02

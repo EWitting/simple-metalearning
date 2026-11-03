@@ -1,0 +1,23 @@
+_target_: simple_metalearning.experiments.bo_selection.BOSelection
+
+n_folds: 5
+n_folds_used: 5
+max_visible: 1024
+n_jobs: 1
+task_limit: null
+
+# When true, flows imputed with the dummy baseline (e.g. a classification
+# model on a regression task) are excluded from BO selection and from regret
+# reference computations.  Imputed values are still used for surrogate
+# training.  False (default) punishes models for not handling a task.
+exclude_invalid: false
+
+# Cold-start ablation: force the first N picks to be random for *every*
+# estimator (identical initialisation), so AUC reflects the surrogate rather
+# than a warm informed first pick.  0 = each estimator's native start.
+cold_start_steps: 0
+
+# joblib backend: "loky" (separate processes, default) or "threading" (shared
+# memory).  Use "threading" for estimators that segfault under loky's spawned
+# workers (e.g. BoTorch MultiTaskGP).
+parallel_backend: loky

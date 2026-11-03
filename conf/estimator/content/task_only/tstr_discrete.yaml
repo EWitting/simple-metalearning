@@ -1,0 +1,21 @@
+# TST-R(discrete) — Two-Stage Transfer surrogate with Rankings (Wistuba et al.
+# 2016), GP-free / discrete variant.  Base "models" are the exact performance
+# matrix columns; weights come from a Nadaraya-Watson Epanechnikov kernel over
+# the fraction-of-discordant-pairs distance to the target's revealed ordering.
+# Same surrogate-free, discrete-only setting as RGPE-Oracle and Linear-Perf;
+# differs from RGPE-Oracle only in the weighting scheme (NW kernel vs ABE
+# bootstrap probability-best).
+_target_: functools.partial
+_args_:
+  - _target_: hydra.utils.get_class
+    path: simple_metalearning.estimators.rgpe.RGPEEstimator
+oracle_base: true
+weighting: tstr
+# Epanechnikov bandwidth: base tasks with discordant-pair fraction >= this get
+# zero weight (0.5 keeps tasks that rank the revealed configs better than random).
+tstr_bandwidth: 0.5
+use_base_variance: true
+random_state: 42
+acquisition_fn:
+  _target_: simple_metalearning.estimators.acquisition.EIGaussianAcquisition
+  xi: 0.0

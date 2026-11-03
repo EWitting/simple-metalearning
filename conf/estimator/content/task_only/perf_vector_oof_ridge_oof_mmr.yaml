@@ -1,0 +1,15 @@
+# BayesianRidge on OOF RF predictions with MMR similarity built from OOF matrix.
+# Unlike perf_vector_oof_ridge_mmr (which computes similarity on the raw performance
+# matrix), this variant passes the dense OOF prediction matrix to MMR so that
+# flow similarity reflects predicted rather than observed (sparse) performance.
+_target_: functools.partial
+_args_:
+  - _target_: hydra.utils.get_class
+    path: simple_metalearning.estimators.oof_ridge_ei.OOFRidgeMMREstimator
+rf_n_estimators: 100
+rf_min_samples_leaf: 3
+n_splits: 5
+acquisition_fn:
+  _target_: simple_metalearning.estimators.acquisition.MMRAcquisition
+  mmr_lambda: 0.05
+  negative_sim_filter: true

@@ -1,0 +1,3 @@
+_target_: simple_metalearning.estimators.acquisition.UCBAcquisition
+# Exploration weight. kappa=0 is equivalent to greedy. Typical values: 1-3.
+kappa: 2.0

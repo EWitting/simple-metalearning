@@ -1,0 +1,24 @@
+# Multi-Task GP (intrinsic coregionalization; Swersky, Snoek, Adams 2013) — HPO.
+# BoTorch MultiTaskGP: K((x,t),(x',t')) = K_t(t,t') * K_x(x,x'), with K_x a
+# Matern-5/2 on the flow hyperparameters and K_t an IndexKernel over tasks.
+# Tractability levers: performance-diverse auxiliary tasks (no task metafeatures),
+# context-flow subsampling, and a geometric kernel-refit schedule.
+_target_: functools.partial
+_args_:
+  - _target_: hydra.utils.get_class
+    path: simple_metalearning.estimators.multitask_gp_ei.MultiTaskGPEIEstimator
+# Number of performance-diverse auxiliary tasks to transfer from.
+n_aux_tasks: 6
+# Auxiliary observations per task (target is always predicted at all flows).
+# Kept small: the exact MTGP is rebuilt each BO step, so cost ~ (block size)^3.
+n_context_flows: 40
+# ICM task-covariance rank (null = BoTorch default = full rank over tasks).
+rank: null
+# Re-fit kernel hyperparameters when target obs grow by this factor.
+refit_factor: 3.0
+use_metadata: true
+standardize_outputs: true
+random_state: 42
+acquisition_fn:
+  _target_: simple_metalearning.estimators.acquisition.EIGaussianAcquisition
+  xi: 0.0

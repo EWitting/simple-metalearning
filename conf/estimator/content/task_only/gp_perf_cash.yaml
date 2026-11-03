@@ -1,0 +1,22 @@
+# Task-only GP-EI on PCA-compressed performance vectors (pure collaborative, CASH).
+# No hyperparameter features (use_metadata=false): similarity is measured purely
+# in performance space, giving well-calibrated Bayesian uncertainty for EI.
+# n_components is set to the value selected by experiments/sweep_gp_perf.bat;
+# update via scripts/pick_best_gp_perf.py after the sweep completes.
+_target_: functools.partial
+_args_:
+  - _target_: hydra.utils.get_class
+    path: simple_metalearning.estimators.task_only_gp_ei.TaskOnlyGPEIEstimator
+gp_model:
+  _target_: sklearn.gaussian_process.GaussianProcessRegressor
+  random_state: 42
+ard: false
+f_star_from_predictions: false
+use_metadata: false
+performance_transform:
+  _target_: simple_metalearning.datasets.metafeature_transforms.PerformanceVectorTransform
+  n_components: 16
+  impute_strategy: mean
+acquisition_fn:
+  _target_: simple_metalearning.estimators.acquisition.EIGaussianAcquisition
+  xi: 0.0

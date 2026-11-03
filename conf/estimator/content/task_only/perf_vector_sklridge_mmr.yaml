@@ -1,0 +1,12 @@
+# Plain Ridge regression on performance-vector features with MMR diversity (Ridge-MMR).
+_target_: functools.partial
+_args_:
+  - _target_: hydra.utils.get_class
+    path: simple_metalearning.estimators.linear_regression_estimator.LinearRegressionEstimator
+model_type: ridge
+alpha: 1.0
+fit_intercept: false
+acquisition_fn:
+  _target_: simple_metalearning.estimators.acquisition.MMRAcquisition
+  mmr_lambda: 0.05
+  negative_sim_filter: true

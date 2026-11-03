@@ -1,0 +1,17 @@
+_target_: functools.partial
+_args_:
+  - _target_: hydra.utils.get_class
+    path: simple_metalearning.estimators.task_only_gp_ei.TaskOnlyGPEIEstimator
+gp_model:
+  _target_: sklearn.gaussian_process.GaussianProcessRegressor
+  random_state: 42
+ard: false
+# Use best observed value as f_star (correct for deterministic table lookups).
+# Set to true only if observations are noisy (e.g. real training runs).
+f_star_from_predictions: false
+# Acquisition function — override on the CLI without a separate yaml file:
+#   estimator.acquisition_fn._target_=simple_metalearning.estimators.acquisition.CostCooledEIAcquisition
+#   estimator.acquisition_fn._target_=simple_metalearning.estimators.acquisition.UCBAcquisition
+acquisition_fn:
+  _target_: simple_metalearning.estimators.acquisition.EIGaussianAcquisition
+  xi: 0.0

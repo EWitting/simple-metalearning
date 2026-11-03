@@ -1,0 +1,20 @@
+# RGPE-Oracle — ablation of RGPE with NO GPs at all.
+# Base "models" are the exact known performance-matrix columns (ground truth)
+# instead of fitted GPs, and the target GP is dropped.  The result is a purely
+# rank-weighted collaborative ensemble of the base-task columns: discrete-only
+# (predictions exist only for evaluated flows), directly comparable to the
+# perf-vector baselines (e.g. Linear-Perf).  Weight dilution is not applicable
+# (no target model) and is skipped; EI uncertainty comes from base-task
+# disagreement.  Isolates how much of RGPE comes from the ranking/weighting
+# machinery vs the GP surrogates.
+_target_: functools.partial
+_args_:
+  - _target_: hydra.utils.get_class
+    path: simple_metalearning.estimators.rgpe.RGPEEstimator
+oracle_base: true
+n_bootstrap_samples: 256
+use_base_variance: true
+random_state: 42
+acquisition_fn:
+  _target_: simple_metalearning.estimators.acquisition.EIGaussianAcquisition
+  xi: 0.0

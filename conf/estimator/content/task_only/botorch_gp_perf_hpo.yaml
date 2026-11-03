@@ -1,0 +1,19 @@
+# BoTorch GP-EI on PCA-compressed performance vectors (pure collaborative, HPO).
+# No hyperparameter features (use_metadata=false): similarity measured purely
+# in performance space. n_components set by sweep_gp_perf.bat / pick_best_gp_perf.py.
+_target_: functools.partial
+_args_:
+  - _target_: hydra.utils.get_class
+    path: simple_metalearning.estimators.task_only_botorch_gp_ei.TaskOnlyBoTorchGPEIEstimator
+n_restarts: 0
+f_star_from_predictions: false
+use_metadata: false
+normalize_inputs: true
+standardize_outputs: true
+performance_transform:
+  _target_: simple_metalearning.datasets.metafeature_transforms.PerformanceVectorTransform
+  n_components: null
+  impute_strategy: mean
+acquisition_fn:
+  _target_: simple_metalearning.estimators.acquisition.EIGaussianAcquisition
+  xi: 0.0

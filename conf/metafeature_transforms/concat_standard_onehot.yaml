@@ -1,0 +1,11 @@
+# Flow metafeatures unchanged, task as one-hot only
+# Matches the notebook's second approach: X_flow[i] + onehot_task[j]
+flow:
+  - _target_: simple_metalearning.datasets.metafeature_transforms.StandardScalerTransform
+    fill_na: true
+  - _target_: simple_metalearning.datasets.metafeature_transforms.OneHotTransform
+
+task:
+  - _target_: simple_metalearning.datasets.metafeature_transforms.StandardScalerTransform
+    fill_na: true
+  - _target_: simple_metalearning.datasets.metafeature_transforms.OneHotTransform

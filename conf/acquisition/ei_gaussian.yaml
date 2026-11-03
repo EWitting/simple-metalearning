@@ -1,0 +1,3 @@
+_target_: simple_metalearning.estimators.acquisition.EIGaussianAcquisition
+# Exploration bonus added to f_star. 0 = standard EI; positive values increase exploration.
+xi: 0.0

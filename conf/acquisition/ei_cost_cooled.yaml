@@ -1,0 +1,6 @@
+_target_: simple_metalearning.estimators.acquisition.CostCooledEIAcquisition
+# Cost penalty exponent. 1.0 = linear (Snoek 2012 default), 0.5 = sqrt, 0.0 = no penalty.
+alpha: 1.0
+# Exploration bonus forwarded to the base EI acquisition.
+xi: 0.0
+# base_acq defaults to EIGaussianAcquisition; override via nested config if needed.

@@ -1,0 +1,23 @@
+defaults:
+  - deep/two_tower@_here_
+
+use_flow_features: true
+use_task_features: false
+
+# null = identity tower (no projection); embedding_dim must match embed dims.
+embedding_dim: 8
+flow_tower_dims: [64,64]
+task_tower_dims: null
+flow_embed_dim: 0
+task_embed_dim: ${.embedding_dim}
+
+n_epochs: 500
+n_iter_update: 5
+batch_size: 1024
+optimizer_class:
+  _target_: functools.partial
+  _args_:
+    - _target_: hydra.utils.get_class
+      path: torch.optim.AdamW
+  lr: 0.007
+  weight_decay: 0.02

@@ -1,0 +1,17 @@
+# Rank-based normalization via QuantileTransformer (output: standard normal).
+# Distribution-agnostic: correctly handles log-uniform, uniform, or any other
+# hyperparameter sampling without needing to specify which columns are log-sampled.
+# Uses PipelineTransform so DropConstant runs first and QuantileTransform sees
+# only the non-constant columns (avoids NaN from concatenating separate outputs).
+# Trade-off vs standardscaler: loses original scale interpretability but better
+# suited when hyperparameters span multiple log-decades (e.g. min_child_weight).
+flow:
+  - _target_: simple_metalearning.datasets.metafeature_transforms.PipelineTransform
+    steps:
+      - _target_: simple_metalearning.datasets.metafeature_transforms.DropConstantTransform
+      - _target_: simple_metalearning.datasets.metafeature_transforms.QuantileTransform
+        fill_na: true
+
+task:
+  - _target_: simple_metalearning.datasets.metafeature_transforms.StandardScalerTransform
+    fill_na: true

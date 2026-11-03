@@ -1,0 +1,8 @@
+# Standardize metafeatures (mean=0, std=1)
+flow:
+  - _target_: simple_metalearning.datasets.metafeature_transforms.StandardScalerTransform
+    fill_na: true
+
+task:
+  - _target_: simple_metalearning.datasets.metafeature_transforms.StandardScalerTransform
+    fill_na: true

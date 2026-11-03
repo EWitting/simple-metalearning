@@ -1,0 +1,12 @@
+# Bootstrap ensemble of OLS on performance-vector features, LogEI acquisition (Ensemble-Linear-LogEI).
+_target_: functools.partial
+_args_:
+  - _target_: hydra.utils.get_class
+    path: simple_metalearning.estimators.ensemble_linear_estimator.EnsembleLinearEstimator
+model_type: ols
+n_estimators: 50
+fit_intercept: false
+random_state: 42
+acquisition_fn:
+  _target_: simple_metalearning.estimators.acquisition.LogEIGaussianAcquisition
+  xi: 0.0

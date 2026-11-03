@@ -1,0 +1,29 @@
+# RGPE — Ranking-Weighted GP Ensemble (Feurer, Letham, Hutter, Bakshy 2018).
+# Transfer-learning surrogate: one base GP per training task + a target GP,
+# combined by ranking-loss weights. Uses flow hyperparameter features only
+# (like the other "Hyper" estimators); transfer comes from the ensemble, not
+# from performance-vector features. Drops into the standard Gaussian-EI loop.
+_target_: functools.partial
+_args_:
+  - _target_: hydra.utils.get_class
+    path: simple_metalearning.estimators.rgpe.RGPEEstimator
+# Bootstrap samples S for the ranking-weight Monte Carlo (Algorithm 1).
+n_bootstrap_samples: 256
+# K-fold out-of-fold predictions for the target-model loss (paper uses LOO).
+target_cv_folds: 5
+# RGPE(EI): ensemble variance = sum_i w_i^2 sigma_i^2 (Eq. 6).
+# Set false for RGPE(mean): keep only the target model's variance.
+use_base_variance: true
+# Sec. 4.3 weight-dilution prevention (Eq. 9). Important with many base tasks;
+# decays all base weight to zero as the budget is spent.
+prevent_weight_dilution: true
+# Optimisation horizon H for the dilution decay — keep equal to experiment.max_visible.
+horizon: 200
+# Optional cap on base tasks (random subset when exceeded); null = use all.
+max_base_tasks: null
+normalize_inputs: true
+standardize_outputs: true
+random_state: 42
+acquisition_fn:
+  _target_: simple_metalearning.estimators.acquisition.EIGaussianAcquisition
+  xi: 0.0

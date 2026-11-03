@@ -1,0 +1,10 @@
+_target_: functools.partial
+_args_:
+  - _target_: hydra.utils.get_class
+    path: simple_metalearning.estimators.continuous.ContinuousOOFRidgeMMREstimator
+rf_n_estimators: 100
+rf_min_samples_leaf: 3
+acquisition_fn:
+  _target_: simple_metalearning.estimators.acquisition.MMRAcquisition
+  mmr_lambda: 0.5
+  negative_sim_filter: true

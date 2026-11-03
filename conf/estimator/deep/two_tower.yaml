@@ -1,0 +1,61 @@
+# Two-tower estimator with configurable MLP towers and optional learned embeddings.
+# Flows and tasks can each use content features, a learned nn.Embedding, or both.
+_target_: functools.partial
+_args_:
+  - _target_: hydra.utils.get_class
+    path: simple_metalearning.estimators.two_tower.TwoTowerEstimator
+
+# ── Tower architecture ──────────────────────────────────────────────────────
+embedding_dim: 32
+
+# Hidden layer widths for each MLP tower.  [] = single linear (default).
+flow_tower_dims: [64, 32]
+task_tower_dims: [64, 32]
+activation: relu  # relu | gelu | tanh | leaky_relu | silu
+
+# Learnable per-flow/task embeddings (collaborative signal).
+# Set > 0 to supplement (or replace) content features.
+flow_embed_dim: 0
+task_embed_dim: 0
+
+# Set to false to ignore content features entirely (embed-only / pure CF mode).
+use_flow_features: true
+use_task_features: true
+
+# Training parameters
+n_epochs: 500
+n_iter_update: 5   # fine-tuning epochs per partial_fit (warm restart, ~10% of n_epochs)
+update_task_only: true  # true = fine-tune on all observed data for the updated task only; false = all tasks
+batch_size: 2048
+
+# Loss function (instantiated directly via _target_)
+# Options:
+#   - torch.nn.MSELoss (default, pointwise regression)
+#   - torch.nn.HuberLoss (robust to outliers)
+#   - simple_metalearning.estimators.losses.info_nce.InfoNCELossWithEmbeddings (ranking/contrastive)
+loss_fn:
+  _target_: torch.nn.MSELoss
+  # For InfoNCE (state-of-the-art ranking loss):
+  # _target_: simple_metalearning.estimators.losses.info_nce.InfoNCELossWithEmbeddings
+  # temperature: 0.07
+
+# Optimizer (using functools.partial pattern)
+optimizer_class:
+  _target_: functools.partial
+  _args_:
+    - _target_: hydra.utils.get_class
+      path: torch.optim.AdamW
+  lr: 0.005
+  weight_decay: 0.02
+
+# Scheduler (optional - using functools.partial pattern)
+scheduler_class: null
+
+acquisition_fn:
+  _target_: simple_metalearning.estimators.acquisition.EmbeddingMMRAcquisition
+  mmr_lambda: 0.05
+
+# Device and misc
+device: auto  # "auto", "cuda", or "cpu"
+random_state: 42
+verbose: false

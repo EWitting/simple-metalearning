@@ -1,0 +1,5 @@
+_target_: simple_metalearning.estimators.acquisition.MMRAcquisition
+# Trade-off: 1.0 = pure exploitation (greedy), 0.0 = pure diversity.
+mmr_lambda: 0.5
+# Treat negative cosine similarities as zero (anti-correlated flows not penalised).
+negative_sim_filter: true

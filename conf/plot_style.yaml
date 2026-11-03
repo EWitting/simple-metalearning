@@ -1,0 +1,153 @@
+# Plot style configuration.
+# Keys are W&B run display names. All fields are optional:
+#   label     — legend text (defaults to run name)
+#   color     — matplotlib color string or hex
+#   linestyle — solid / dashed / dotted / dashdot (defaults to solid)
+#   marker    — matplotlib marker string (e.g. 'o', '^'); empty = no marker
+#
+# Design rules:
+#   - One color per model family; Hyper and Perf variants share the family color
+#   - Marker encodes Perf features only: '^' = Perf, no marker = Hyper (plain line)
+#   - Baselines: Random = dashed no-marker, Mean = solid no-marker, Mean+MMR = solid + '^'
+#
+# Family colors (Okabe-Ito colorblind-safe palette):
+#   Naive baselines  — greys
+#   Linear           — blue         #0072B2
+#   Random Forest    — amber        #E69F00
+#   GP               — bluish-green #009E73
+#   Two-Tower        — pink-purple  #CC79A7
+#
+# ── Exclusions ───────────────────────────────────────────────────
+# MAIN-PAPER plot = base surrogates (Linear/RF/GP x Perf/Hyper) + naive + the
+# dedicated Meta-learning baselines (ABLR/TST-R/Active-Testing/MTGP/RGPE).
+# Two-Tower and RGPE-Oracle are appendix material and excluded here.
+# (MTGP/RGPE have no CASH runs -> they simply do not appear on CASH.)
+exclude:
+  - TwoTower-Perf
+  - TwoTower-Hyper
+  - RGPE-Oracle
+  - TST-R
+  - Linear-Perf-Warm
+
+# ── Naive baselines ──────────────────────────────────────────────
+Naive-Random:
+  label: "Random"
+  color: "#aaaaaa"
+  linestyle: "dashed"
+
+Naive-Mean:
+  label: "Mean"
+  color: "#777777"
+  linestyle: "solid"
+
+Naive-Mean-MMR:
+  label: "MeanMMR"
+  color: "#444444"
+  linestyle: "solid"
+  marker: "^"
+
+# ── Linear family ────────────────────────────────────────────────
+Linear-Perf:
+  label: "Linear (Perf)"
+  color: "#0072B2"
+  marker: "^"
+
+Linear-Hyper:
+  label: "Linear (Hyper)"
+  color: "#0072B2"
+  linestyle: "dashed"
+
+# ── Random Forest family ─────────────────────────────────────────
+RF-Perf:
+  label: "RF (Perf)"
+  color: "#E69F00"
+  marker: "^"
+
+RF-Hyper:
+  label: "RF (Hyper)"
+  color: "#E69F00"
+  linestyle: "dashed"
+
+# ── GP family ────────────────────────────────────────────────────
+GP-Perf:
+  label: "GP (Perf)"
+  color: "#009E73"
+  marker: "^"
+
+GP-Hyper:
+  label: "GP (Hyper)"
+  color: "#009E73"
+  linestyle: "dashed"
+
+# ── Two-Tower family ─────────────────────────────────────────────
+TwoTower-Perf:
+  label: "Two-Tower (Perf)"
+  color: "#CC79A7"
+  marker: "^"
+
+TwoTower-Hyper:
+  label: "Two-Tower (Hyper)"
+  color: "#CC79A7"
+  linestyle: "dashed"
+
+# ── Transfer / meta-BO SOTA baselines ────────────────────────────
+# Vermillion = transfer family (RGPE now; MTGP / ABLR to follow).
+RGPE:
+  label: "RGPE"
+  color: "#D55E00"
+  marker: "s"
+
+# RGPE ablation with no GPs (oracle base columns) — dashed, same family colour.
+RGPE-Oracle:
+  label: "RGPE (no GP)"
+  color: "#D55E00"
+  linestyle: "dashed"
+  marker: "s"
+
+# Surrogate-free discrete transfer baselines (same vermillion family).
+TST-R:
+  label: "TST-R (disc)"
+  color: "#D55E00"
+  linestyle: "dotted"
+  marker: "D"
+
+Active-Testing:
+  label: "Active Testing"
+  color: "#882255"
+  linestyle: "dashdot"
+  marker: "v"
+
+# Multi-Task GP (ICM; Swersky et al. 2013) — sky blue, its own approach.
+MTGP:
+  label: "MTGP"
+  color: "#56B4E9"
+  marker: "P"
+
+# ABLR (Perrone et al. 2018) — shared NN + Bayesian linear regression heads.
+ABLR:
+  label: "ABLR"
+  color: "#999933"
+  marker: "X"
+
+# ── Per-family plot groupings ─────────────────────────────────────
+# background_methods are drawn faded behind all per-family plots.
+background_methods:
+  - Naive-Random
+  - Naive-Mean
+  - Naive-Mean-MMR
+
+families:
+  Linear:
+    - Linear-Perf
+    - Linear-Hyper
+  Random Forest:
+    - RF-Perf
+    - RF-Hyper
+  Gaussian Process:
+    - GP-Perf
+    - GP-Hyper
+  Meta-learning:
+    - ABLR
+    - Active-Testing
+    - MTGP
+    - RGPE

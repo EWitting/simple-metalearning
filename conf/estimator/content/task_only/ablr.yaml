@@ -1,0 +1,18 @@
+# ABLR — Adaptive Bayesian Linear Regression (Perrone et al. 2018).
+# Shared neural feature map across tasks + per-task Bayesian linear regression
+# head.  Meta-trained once per fold by maximising the summed per-task BLR log
+# marginal likelihood; at BO time the target uses a closed-form BLR head (linear
+# in #observations).  Calibrated mean/variance feed standard EI.
+_target_: functools.partial
+_args_:
+  - _target_: hydra.utils.get_class
+    path: simple_metalearning.estimators.ablr.ABLREstimator
+feature_dim: 50
+hidden: [50, 50]
+n_epochs: 300
+lr: 0.01
+use_metadata: true
+random_state: 42
+acquisition_fn:
+  _target_: simple_metalearning.estimators.acquisition.EIGaussianAcquisition
+  xi: 0.0

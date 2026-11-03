@@ -1,0 +1,3 @@
+_target_: simple_metalearning.estimators.acquisition.EIForestAcquisition
+# Exploration bonus added to f_star.
+xi: 0.0

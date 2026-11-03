@@ -1,0 +1,9 @@
+_target_: functools.partial
+_args_:
+  - _target_: hydra.utils.get_class
+    path: simple_metalearning.estimators.continuous.ContinuousOOFRidgeEstimator
+rf_n_estimators: 100
+rf_min_samples_leaf: 3
+acquisition_fn:
+  _target_: simple_metalearning.estimators.acquisition.EIGaussianAcquisition
+  xi: 0.0

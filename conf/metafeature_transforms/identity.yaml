@@ -1,0 +1,6 @@
+# No transformation - keep metafeatures as-is
+flow:
+  - _target_: simple_metalearning.datasets.metafeature_transforms.IdentityTransform
+
+task:
+  - _target_: simple_metalearning.datasets.metafeature_transforms.IdentityTransform

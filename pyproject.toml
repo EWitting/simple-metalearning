@@ -1,0 +1,48 @@
+[project]
+name = "simple-metalearning"
+version = "0.1.0"
+description = "Meta-learning for algorithm selection and hyperparameter optimisation"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "botorch>=0.16.1",
+    "configspace>=1.2.2",
+    "cython>=3.2.2",
+    "gpytorch>=1.15.2",
+    "hydra-core>=1.3.2",
+    "matplotlib>=3.7.5",
+    "numpy>=1.24.4",
+    "openml>=0.15.1",
+    "pandas>=2.0.3",
+    "rich>=15.0.0",
+    "scikit-learn>=1.3.2",
+    "seaborn>=0.13.2",
+    "tabarena",
+    "torch>=2.5.1",
+    "tqdm>=4.67.1",
+    "wandb>=0.23.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.uv]
+prerelease = "allow"
+
+[tool.uv.sources]
+# tabarena is sourced from the AutoGluon TabArena repository.
+# Clone it alongside this repo and point the path here, or adjust to a published release.
+# git clone https://github.com/autogluon/tabarena external_repos/tabarena
+tabarena = { path = "external_repos/tabarena/packages/tabarena", editable = true }
+torch = [
+  { index = "pytorch-cu118", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+]
+torchvision = [
+  { index = "pytorch-cu118", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+]
+
+[[tool.uv.index]]
+name = "pytorch-cu118"
+url = "https://download.pytorch.org/whl/cu118"
+explicit = true

@@ -1,0 +1,16 @@
+# Active Testing (AT1) — Leite, Brazdil, Vanschoren 2012.
+# Surrogate-free tournament selection over the performance matrix using relative
+# landmarks (signed pairwise performance differences).  Warm-starts with the
+# globally best configuration, then repeatedly tests the competitor estimated to
+# most improve over the current best on similar tasks (similarity = relative-
+# landmark agreement over already-evaluated configs).  Discrete-only.
+_target_: functools.partial
+_args_:
+  - _target_: hydra.utils.get_class
+    path: simple_metalearning.estimators.active_testing.ActiveTestingEstimator
+# 1.0 = raw AT1 agreement-fraction similarity; >1 sharpens toward the most
+# similar tasks.
+sim_sharpness: 1.0
+# Greedy: select the argmax estimated-improvement competitor each round.
+acquisition_fn:
+  _target_: simple_metalearning.estimators.acquisition.GreedyAcquisition

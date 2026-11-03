@@ -1,0 +1,13 @@
+# Bootstrap ensemble of Ridge on performance-vector features, EI acquisition (Ensemble-Ridge-EI).
+_target_: functools.partial
+_args_:
+  - _target_: hydra.utils.get_class
+    path: simple_metalearning.estimators.ensemble_linear_estimator.EnsembleLinearEstimator
+model_type: ridge
+alpha: 1.0
+n_estimators: 50
+fit_intercept: false
+random_state: 42
+acquisition_fn:
+  _target_: simple_metalearning.estimators.acquisition.EIGaussianAcquisition
+  xi: 0.0

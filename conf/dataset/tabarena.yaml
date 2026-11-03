@@ -1,0 +1,6 @@
+_target_: simple_metalearning.datasets.tabarena.TabArenaDatasetFactory
+cache_dir: "./data/processed"
+methods: base
+normalization: rmse
+val_test_split: false
+drop_default_configs: false

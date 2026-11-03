@@ -1,0 +1,16 @@
+# Standardize flow/task metafeatures (mean=0, std=1) after dropping constant columns.
+# Uses PipelineTransform so DropConstant runs first and StandardScaler sees the
+# reduced column set (avoids NaN leaking from the dropped-column output).
+# DropConstantTransform removes zero-variance features, e.g.:
+#   - model_type_XGB  (constant True in XGBoost-only HPO experiments)
+#   - enable_categorical  (constant 1.0 across all XGBoost configs)
+flow:
+  - _target_: simple_metalearning.datasets.metafeature_transforms.PipelineTransform
+    steps:
+      - _target_: simple_metalearning.datasets.metafeature_transforms.DropConstantTransform
+      - _target_: simple_metalearning.datasets.metafeature_transforms.StandardScalerTransform
+        fill_na: true
+
+task:
+  - _target_: simple_metalearning.datasets.metafeature_transforms.StandardScalerTransform
+    fill_na: true

@@ -1,0 +1,18 @@
+# Multi-Task GP (intrinsic coregionalization; Swersky, Snoek, Adams 2013) — CASH.
+# Same as mtgp_hpo but with heavier context-flow subsampling, since CASH has
+# 3623 flows and 475-dim features (the auxiliary block must stay tractable for
+# the exact GP).  Increase n_context_flows / n_aux_tasks for the overnight slot.
+_target_: functools.partial
+_args_:
+  - _target_: hydra.utils.get_class
+    path: simple_metalearning.estimators.multitask_gp_ei.MultiTaskGPEIEstimator
+n_aux_tasks: 6
+n_context_flows: 48
+rank: null
+refit_factor: 3.0
+use_metadata: true
+standardize_outputs: true
+random_state: 42
+acquisition_fn:
+  _target_: simple_metalearning.estimators.acquisition.EIGaussianAcquisition
+  xi: 0.0

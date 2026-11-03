@@ -1,0 +1,42 @@
+_target_: simple_metalearning.experiments.continuous_bo_selection.ContinuousBOSelection
+
+max_visible: 30
+n_folds: 5
+n_folds_used: 5
+random_state: 42
+n_jobs: 1
+task_limit: null
+test_task_limit: null
+
+# BO settings
+n_init: 5
+
+# Fold selection (how val/test scores are computed per live evaluation).
+#   fold_mode=faithful  : average over ALL val / all test splits — exact match
+#                         to the precomputed matrix (expensive).
+#   fold_mode=subsample : first n_val_folds / n_test_folds splits of each half
+#                         (noisy but unbiased; cheapest defensible).
+#   fold_mode=manual    : use val_split_indices / test_split_indices verbatim.
+fold_mode: subsample
+n_val_folds: 1
+n_test_folds: 1
+val_split_indices: null
+test_split_indices: null
+
+num_bag_folds: 8     # 8 matches the matrix's _BAG_L1 bagged models
+time_limit: 3600
+
+# Acquisition optimiser
+acq_optimizer_type: local_and_random
+n_random: 1000
+n_local_starts: 10
+
+# Cluster sharding: run exactly one (fold, task) per process so a SLURM array
+# index maps to one job.  null = run the full CV (local).
+single_fold: null
+single_task: null
+
+# When true, a per-task exception aborts the run (use locally to surface bugs).
+# When false (default), the task is recorded as a failure and logged with a full
+# traceback, and the run continues — failures are never silent.
+raise_on_task_failure: false

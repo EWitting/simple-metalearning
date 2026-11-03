@@ -1,0 +1,14 @@
+defaults:
+  - experiment: bo_selection
+  - estimator: naive/random
+  - dataset: tabarena
+  - _self_
+
+wandb:
+  project: "simple-metalearning"
+  entity: ${oc.env:WANDB_ENTITY,null}
+  mode: "offline"
+
+hydra:
+  run:
+    dir: ./outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}

@@ -1,0 +1,22 @@
+# Task-only RF-EI estimator with performance-vector flow features (collaborative).
+# Combines SMAC-style per-tree EI acquisition with PCA-compressed performance
+# matrix rows as flow features.  The PerformanceVectorTransform is fitted
+# inside estimator.fit() (after test-task masking) so there is no data leakage.
+_target_: functools.partial
+_args_:
+  - _target_: hydra.utils.get_class
+    path: simple_metalearning.estimators.task_only_rf_ei.TaskOnlyRandomForestEIEstimator
+rf_model:
+  _target_: sklearn.ensemble.RandomForestRegressor
+  n_estimators: 100
+  random_state: 42
+performance_transform:
+  _target_: simple_metalearning.datasets.metafeature_transforms.PerformanceVectorTransform
+  n_components: 16
+  impute_strategy: mean
+f_star_from_predictions: false
+# Acquisition function — override on the CLI without a separate yaml file:
+#   estimator.acquisition_fn._target_=simple_metalearning.estimators.acquisition.CostCooledEIAcquisition
+acquisition_fn:
+  _target_: simple_metalearning.estimators.acquisition.EIForestAcquisition
+  xi: 0.0

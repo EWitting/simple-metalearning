@@ -1,0 +1,11 @@
+# PCA + One-hot encoding (concatenated)
+# Similar to the notebook approach with PCA on task features + one-hot
+# PCA includes standardization by default
+flow:
+  - _target_: simple_metalearning.datasets.metafeature_transforms.IdentityTransform
+
+task:
+  - _target_: simple_metalearning.datasets.metafeature_transforms.PCATransform
+    n_components: 10
+    standardize: true  # Default, but shown explicitly
+  - _target_: simple_metalearning.datasets.metafeature_transforms.OneHotTransform

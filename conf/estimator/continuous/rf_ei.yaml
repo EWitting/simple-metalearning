@@ -1,0 +1,9 @@
+_target_: functools.partial
+_args_:
+  - _target_: hydra.utils.get_class
+    path: simple_metalearning.estimators.continuous.ContinuousRFEIEstimator
+rf_model:
+  _target_: sklearn.ensemble.RandomForestRegressor
+  n_estimators: 100
+  min_samples_leaf: 3
+  random_state: 42

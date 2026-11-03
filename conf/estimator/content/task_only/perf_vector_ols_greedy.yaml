@@ -1,0 +1,10 @@
+# OLS on performance-vector features, greedy acquisition (Linear-Greedy).
+# No regularization, no uncertainty — pure collaborative filtering baseline.
+_target_: functools.partial
+_args_:
+  - _target_: hydra.utils.get_class
+    path: simple_metalearning.estimators.linear_regression_estimator.LinearRegressionEstimator
+model_type: ols
+fit_intercept: false
+acquisition_fn:
+  _target_: simple_metalearning.estimators.acquisition.GreedyAcquisition

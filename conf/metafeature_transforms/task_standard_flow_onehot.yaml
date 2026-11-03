@@ -1,0 +1,6 @@
+flow:
+  - _target_: simple_metalearning.datasets.metafeature_transforms.OneHotTransform
+
+task:
+  - _target_: simple_metalearning.datasets.metafeature_transforms.StandardScalerTransform
+    fill_na: true

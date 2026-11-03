@@ -1,0 +1,16 @@
+_target_: functools.partial
+_args_:
+  - _target_: hydra.utils.get_class
+    path: simple_metalearning.estimators.task_only_botorch_gp_ei.TaskOnlyBoTorchGPEIEstimator
+# 0 = warm-start only (fast); increase for better hyperparameter search at cost of speed
+n_restarts: 0
+# Use best observed value as f_star (correct for deterministic table lookups)
+f_star_from_predictions: false
+# BoTorch Normalize (inputs → [0,1]) and Standardize (outputs → mean=0, std=1)
+normalize_inputs: true
+standardize_outputs: true
+# Acquisition function — can be overridden via CLI:
+#   estimator.acquisition_fn._target_=simple_metalearning.estimators.acquisition.UCBAcquisition
+acquisition_fn:
+  _target_: simple_metalearning.estimators.acquisition.EIGaussianAcquisition
+  xi: 0.0
